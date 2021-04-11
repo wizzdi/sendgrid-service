@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class SendGridServerRepository extends AbstractRepositoryPlugin {
 	public void addSendGridServerFiltering(SendGridServerFiltering filtering, CriteriaBuilder cb, Root<SendGridServer> r, List<Predicate> preds) {
 		IEquipmentRepository.addEquipmentFiltering(filtering, cb, r, preds);
 		if(filtering.getApiKeys()!=null &&!filtering.getApiKeys().isEmpty()){
-			Set<String> ids=filtering.getApiKeys().stream().map(f->f.getId()).collect(Collectors.toSet());
+			Set<String> ids= filtering.getApiKeys();
 			preds.add(r.get(SendGridServer_.apiKey).in(ids));
 		}
 	}

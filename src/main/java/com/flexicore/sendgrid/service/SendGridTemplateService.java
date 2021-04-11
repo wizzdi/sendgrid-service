@@ -5,7 +5,6 @@ import com.flexicore.annotations.plugins.PluginInfo;
 import com.flexicore.data.jsoncontainers.PaginationResponse;
 import com.flexicore.interfaces.ServicePlugin;
 import com.flexicore.model.Baseclass;
-import com.flexicore.product.interfaces.IEquipmentService;
 import com.flexicore.security.SecurityContext;
 import com.flexicore.sendgrid.data.SendGridTemplateRepository;
 import com.flexicore.sendgrid.model.ImportTemplatesRequest;
@@ -16,13 +15,14 @@ import com.flexicore.sendgrid.request.SendGridTemplateCreate;
 import com.flexicore.sendgrid.request.SendGridTemplateUpdate;
 import com.flexicore.service.BaseclassNewService;
 import org.pf4j.Extension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.BadRequestException;
 import java.util.List;
-import java.util.logging.Logger;
 
 @PluginInfo(version = 1)
 @Extension
@@ -36,8 +36,7 @@ public class SendGridTemplateService implements ServicePlugin {
 	@Autowired
 	private BaseclassNewService baseclassNewService;
 
-	@Autowired
-	private Logger logger;
+	private static final Logger logger = LoggerFactory.getLogger(SendGridTemplateService.class);
 
 	public PaginationResponse<SendGridTemplate> getAllSendGridTemplates(
 			SecurityContext securityContext,
@@ -56,7 +55,7 @@ public class SendGridTemplateService implements ServicePlugin {
 	}
 
 	public Long countAllSendGridTemplates(SecurityContext securityContext,
-			SendGridTemplateFiltering filtering) {
+										  SendGridTemplateFiltering filtering) {
 		return sendGridTemplateRepository.countAllSendGridTemplates(
 				filtering, securityContext);
 	}
@@ -69,7 +68,7 @@ public class SendGridTemplateService implements ServicePlugin {
 			update = true;
 		}
 
-		if (createSendGridTemplate.getSendGridServer() != null && (sendGridTemplate.getSendGridServer()==null||!createSendGridTemplate.getSendGridServer().getId().equals(sendGridTemplate.getSendGridServer().getId()))) {
+		if (createSendGridTemplate.getSendGridServer() != null && (sendGridTemplate.getSendGridServer() == null || !createSendGridTemplate.getSendGridServer().getId().equals(sendGridTemplate.getSendGridServer().getId()))) {
 			sendGridTemplate.setSendGridServer(createSendGridTemplate.getSendGridServer());
 			update = true;
 		}
@@ -79,32 +78,31 @@ public class SendGridTemplateService implements ServicePlugin {
 
 	public void validate(ImportTemplatesRequest importTemplatesRequest,
 						 SecurityContext securityContext) {
-		String sendGridServerId=importTemplatesRequest.getSendGridServerId();
-		SendGridServer sendGridServer=sendGridServerId!=null?getByIdOrNull(sendGridServerId,SendGridServer.class,null,securityContext):null;
-		if(sendGridServer==null){
-			throw new BadRequestException("No SendGridServer with id "+sendGridServerId);
+		String sendGridServerId = importTemplatesRequest.getSendGridServerId();
+		SendGridServer sendGridServer = sendGridServerId != null ? getByIdOrNull(sendGridServerId, SendGridServer.class, null, securityContext) : null;
+		if (sendGridServer == null) {
+			throw new BadRequestException("No SendGridServer with id " + sendGridServerId);
 		}
 		importTemplatesRequest.setSendGridServer(sendGridServer);
 
 	}
 
 	public void validate(SendGridTemplateCreate createSendGridTemplate,
-			SecurityContext securityContext) {
+						 SecurityContext securityContext) {
 		baseclassNewService.validate(createSendGridTemplate,
 				securityContext);
-		String sendGridServerId=createSendGridTemplate.getSendGridServerId();
-		SendGridServer sendGridServer=sendGridServerId!=null?getByIdOrNull(sendGridServerId,SendGridServer.class,null,securityContext):null;
-		if(sendGridServer==null){
-			throw new BadRequestException("No Sendgrid server with id "+sendGridServerId);
+		String sendGridServerId = createSendGridTemplate.getSendGridServerId();
+		SendGridServer sendGridServer = sendGridServerId != null ? getByIdOrNull(sendGridServerId, SendGridServer.class, null, securityContext) : null;
+		if (sendGridServer == null) {
+			throw new BadRequestException("No Sendgrid server with id " + sendGridServerId);
 		}
 		createSendGridTemplate.setSendGridServer(sendGridServer);
 
 	}
 
 
-
 	public void validateFiltering(SendGridTemplateFiltering filtering,
-			SecurityContext securityContext) {
+								  SecurityContext securityContext) {
 		baseclassNewService.validateFilter(filtering, securityContext);
 
 	}
@@ -130,7 +128,7 @@ public class SendGridTemplateService implements ServicePlugin {
 	}
 
 	public <T extends Baseclass> T getByIdOrNull(String id, Class<T> c,
-			List<String> batchString, SecurityContext securityContext) {
+												 List<String> batchString, SecurityContext securityContext) {
 		return sendGridTemplateRepository.getByIdOrNull(id, c, batchString,
 				securityContext);
 	}

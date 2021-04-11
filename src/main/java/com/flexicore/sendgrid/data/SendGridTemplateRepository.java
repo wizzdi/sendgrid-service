@@ -34,7 +34,7 @@ public class SendGridTemplateRepository extends AbstractRepositoryPlugin {
 
 	public void addSendGridTemplateFiltering(SendGridTemplateFiltering filtering, CriteriaBuilder cb, Root<SendGridTemplate> r, List<Predicate> preds) {
 		if(filtering.getExternalTemplateIds()!=null && !filtering.getExternalTemplateIds().isEmpty()){
-			Set<String> ids=filtering.getExternalTemplateIds().stream().map(f->f.getId()).collect(Collectors.toSet());
+			Set<String> ids=filtering.getExternalTemplateIds();
 			preds.add(r.get(SendGridTemplate_.externalId).in(ids));
 		}
 		if(filtering.getSendGridServers()!=null && !filtering.getSendGridServers().isEmpty()){

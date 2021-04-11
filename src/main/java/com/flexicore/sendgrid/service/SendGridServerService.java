@@ -25,6 +25,8 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import org.pf4j.Extension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,6 @@ import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @PluginInfo(version = 1)
@@ -54,8 +55,7 @@ public class SendGridServerService implements ServicePlugin {
 	private IEquipmentService equipmentService;
 
 
-	@Autowired
-	private Logger logger;
+	private static final Logger logger= LoggerFactory.getLogger(SendGridServerService.class);
 
 	public PaginationResponse<SendGridServer> getAllSendGridServers(
 			SecurityContext securityContext,

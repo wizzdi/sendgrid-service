@@ -65,7 +65,7 @@ public class SendGridService implements ServicePlugin {
     public void init(PluginsLoadedEvent event){
         SecurityContext securityContext=securityService.getAdminUserSecurityContext();
 
-        List<SendGridServer> servers=sendGridServerService.listAllSendGridServers(securityContext,new SendGridServerFiltering().setApiKeys(Collections.singleton(new ApiKeyRef(sendGridApiKey))));
+        List<SendGridServer> servers=sendGridServerService.listAllSendGridServers(securityContext,new SendGridServerFiltering().setApiKeys(Collections.singleton(sendGridApiKey)));
         SendGridServerCreate sendGridServerCreate=new SendGridServerCreate()
                 .setApiKey(sendGridApiKey)
                 .setName("Default SendGrid Server");
@@ -95,7 +95,7 @@ public class SendGridService implements ServicePlugin {
                 .withTemplateId(sendGridTemplate.getExternalId())
                 .withPersonalizations(Collections.singletonList(
                         new Personalization()
-                                .withTo(sendMailRequestModel.getEmailRefs().stream().map(f->new To().withEmail(f.getId()).withName(f.getId())).collect(Collectors.toList()))
+                                .withTo(sendMailRequestModel.getEmailRefs().stream().map(f->new To().withEmail(f).withName(f)).collect(Collectors.toList()))
                                 .withDynamicTemplateData(sendMailRequestModel.any())
                 ));
 

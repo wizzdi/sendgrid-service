@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Extension
 @EnableAsync(proxyTargetClass = true)
 @EnableTransactionManagement(proxyTargetClass = true)
-public class AsyncSupport implements ServicePlugin {
+public class SendGridAsyncSupport implements Plugin {
 
 }

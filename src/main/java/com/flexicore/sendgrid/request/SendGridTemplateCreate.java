@@ -1,18 +1,13 @@
 package com.flexicore.sendgrid.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flexicore.interfaces.dynamic.FieldInfo;
-import com.flexicore.interfaces.dynamic.IdRefFieldInfo;
-import com.flexicore.product.iot.request.ExternalServerCreate;
-import com.flexicore.request.BaseclassCreate;
 import com.flexicore.sendgrid.model.SendGridServer;
+import com.wizzdi.flexicore.security.request.BasicCreate;
 
-public class SendGridTemplateCreate extends BaseclassCreate {
+public class SendGridTemplateCreate extends BasicCreate {
 
-    @FieldInfo(mandatory = true,description = "Send Grid Template Id")
     private String externalId;
 
-    @IdRefFieldInfo(refType = SendGridServer.class,list = false,mandatory = true)
     private String sendGridServerId;
 
     @JsonIgnore

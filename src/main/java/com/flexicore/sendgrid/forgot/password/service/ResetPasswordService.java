@@ -18,26 +18,29 @@ import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
+import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@PluginInfo(version = 1)
+
 @Component
 @Extension
-public class ResetPasswordService implements ServicePlugin {
+public class ResetPasswordService implements Plugin {
 
     private static final ObjectMapper objectMapper=new ObjectMapper();
 
-    @Value("${flexicore.sendgrid.templateId:@null}")
+    @Value("${flexicore.sendgrid.templateId:#{null}")
     private String templateId;
 
     @Value("${flexicore.sendgrid.mailSenderEmail:help@flexicore.io}")
@@ -95,10 +98,10 @@ public class ResetPasswordService implements ServicePlugin {
 
     public void validate(ResetPasswordRequest resetPasswordRequest) {
         if(resetPasswordRequest.getEmail()==null){
-            throw new BadRequestException("email must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"email must be provided");
         }
         if(resetPasswordRequest.getReturnLink()==null){
-            throw new BadRequestException("return link must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"return link must be provided");
         }
         List<User> users=userService.listAllUsers(new UserFiltering().setEmails(Collections.singleton(resetPasswordRequest.getEmail())),null);
         if(!users.isEmpty()){
@@ -117,7 +120,7 @@ public class ResetPasswordService implements ServicePlugin {
             return resetPasswordResponse;
         }
 
-        com.flexicore.data.jsoncontainers.ResetPasswordResponse prepareResponse=userService.resetPasswordViaMailPrepare(new ResetUserPasswordRequest().setUser(resetPasswordRequest.getUser()));
+        ResetPasswordResponse prepareResponse=userService.resetPasswordViaMailPrepare(new ResetUserPasswordRequest().setUser(resetPasswordRequest.getUser()));
         resetPasswordRequest.setReturnLink(getResetPasswordLink(resetPasswordRequest.getReturnLink(),prepareResponse.getVerificationToken()));
         sendResetPasswordMail(resetPasswordRequest);
         return resetPasswordResponse;

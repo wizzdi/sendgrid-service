@@ -1,12 +1,10 @@
 package com.flexicore.sendgrid.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flexicore.interfaces.dynamic.IdRefFieldInfo;
 import com.flexicore.sendgrid.model.SendGridServer;
 
 public class SendGridServerUpdate extends SendGridServerCreate{
 
-    @IdRefFieldInfo(mandatory = true,refType = SendGridServer.class,list = false)
     private String id;
     @JsonIgnore
     private SendGridServer sendGridServer;

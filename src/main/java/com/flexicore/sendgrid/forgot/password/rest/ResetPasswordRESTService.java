@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * Created by Asaf on 04/06/2017.
  */
 
-@PluginInfo(version = 1)
+
 @OperationsInside
 @UnProtectedREST
 @Path("plugins/resetPassword")
@@ -30,7 +30,7 @@ import javax.ws.rs.Produces;
 @Component
 public class ResetPasswordRESTService implements RestServicePlugin {
 
-	@PluginInfo(version = 1)
+	
 	@Autowired
 	private ResetPasswordService resetPasswordService;
 

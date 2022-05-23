@@ -1,11 +1,9 @@
 package com.flexicore.sendgrid.request;
 
-import com.flexicore.interfaces.dynamic.FieldInfo;
-import com.flexicore.product.iot.request.ExternalServerCreate;
+import com.wizzdi.flexicore.security.request.BasicCreate;
 
-public class SendGridServerCreate extends ExternalServerCreate {
+public class SendGridServerCreate extends BasicCreate {
 
-    @FieldInfo(mandatory = true,description = "Send Grid Api Key")
     private String apiKey;
 
     public String getApiKey() {

@@ -1,19 +1,17 @@
 package com.flexicore.sendgrid.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flexicore.interfaces.dynamic.IdRefFieldInfo;
-import com.flexicore.interfaces.dynamic.ListFieldInfo;
-import com.flexicore.model.FilteringInformationHolder;
+import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
+import com.wizzdi.flexicore.security.request.PaginationFilter;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
-public class SendGridTemplateFiltering extends FilteringInformationHolder {
+public class SendGridTemplateFiltering extends PaginationFilter {
+
+    private BasicPropertiesFilter basicPropertiesFilter;
 
 
     private Set<String> externalTemplateIds=new HashSet<>();
@@ -58,4 +56,12 @@ public class SendGridTemplateFiltering extends FilteringInformationHolder {
         return (T) this;
     }
 
+    public BasicPropertiesFilter getBasicPropertiesFilter() {
+        return basicPropertiesFilter;
+    }
+
+    public <T extends SendGridTemplateFiltering> T setBasicPropertiesFilter(BasicPropertiesFilter basicPropertiesFilter) {
+        this.basicPropertiesFilter = basicPropertiesFilter;
+        return (T) this;
+    }
 }
